@@ -10,11 +10,11 @@ import yosay from 'yosay'
 
 
 /**
- * generator-koa-api
+ * ModBabel
  * @class
  * @extends Base <Yeoman-generator>
  */
-export default class GeneratorKoaApi extends Base {
+export default class ModBabel extends Base {
 
     /**
      * @constructs
@@ -58,24 +58,6 @@ export default class GeneratorKoaApi extends Base {
         name: 'license',
         message: 'What is the project license?',
         choices: [ 'WTFPL', 'ISC', 'MIT' ]
-    }, {
-        name: 'cors',
-        type: 'confirm',
-        message: 'Do you want to enable CORS?',
-        default: true,
-        store: true
-    }, {
-        name: 'daemon',
-        type: 'confirm',
-        message: 'Will the process be daemonized via pm2?',
-        defualt: true,
-        store: true
-    }, {
-        name: 'daemonUser',
-        when: ans => ans.daemon,
-        message: 'Which user should the process run as?',
-        default: osenv.user(),
-        store: true
     }]
 
     /**
@@ -83,8 +65,8 @@ export default class GeneratorKoaApi extends Base {
      */
     hello() {
         this.log( yosay([
-            chalk.cyan( 'Koa RESTful Api' ),
-            'Basic koa restful api server'
+            chalk.cyan( 'Mod Babel' ),
+            'Babel transpiled module'
         ].join( '\n' ) ))
     }
 
@@ -94,7 +76,7 @@ export default class GeneratorKoaApi extends Base {
     prompting() {
         let done = this.async()
 
-        this.prompt( GeneratorKoaApi.prompts, props => {
+        this.prompt( ModBabel.prompts, props => {
             this.props = props
             done()
         })
@@ -128,19 +110,17 @@ export default class GeneratorKoaApi extends Base {
                 })
 
             // For now just tack on the optional file here
-            if ( this.props.daemon ) {
-                files
-                    .filter( file => /^_/.test( path.relative( this.sourceRoot(), file ) ) )
-                    .map( file => file.replace( this.sourceRoot(), '' ) )
-                    .map( file => file.replace( /^\//, '' ) )
-                    .forEach( file => {
-                        this.fs.copyTpl(
-                            this.templatePath( file ),
-                            this.destinationPath( file.replace( /^_/, '' ) ),
-                            this.props
-                        )
-                    })
-            }
+            files
+                .filter( file => /^_/.test( path.relative( this.sourceRoot(), file ) ) )
+                .map( file => file.replace( this.sourceRoot(), '' ) )
+                .map( file => file.replace( /^\//, '' ) )
+                .forEach( file => {
+                    this.fs.copyTpl(
+                        this.templatePath( file ),
+                        this.destinationPath( file.replace( /^_/, '' ) ),
+                        this.props
+                    )
+                })
 
             done()
         })
